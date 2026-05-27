@@ -15,7 +15,7 @@ A simple FastAPI backend project for task management (To-Do API), built to pract
 ```bash
 uvicorn app:app --reload
 ```
-
+Or
 ```bash
 fastapi dev app.py
 ```
