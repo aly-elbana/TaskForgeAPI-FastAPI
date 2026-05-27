@@ -1,13 +1,13 @@
-# FastTaskAPI
+# TaskForgeAPI
 
-A simple FastAPI backend project for task management, built to practice scalable backend architecture and RESTful API development.
+A simple FastAPI backend project for task management (To-Do API), built to practice scalable backend architecture and RESTful API development.
 
 ## Features
 
 - FastAPI
 - CRUD Operations
 - Modular Structure
-- SQLite Database
+- Database Integration 
 - Pydantic Schemas
 
 ## Run
