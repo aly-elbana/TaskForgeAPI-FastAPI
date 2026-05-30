@@ -2,6 +2,8 @@
 from fastapi import FastAPI, status
 from utils.database import engine, Base
 from routes import TodoRouter as todo_routes
+from routes import AuthRouter as auth_routes
+
 
 app = FastAPI(
     title="Todo API",
@@ -12,6 +14,7 @@ app = FastAPI(
 Base.metadata.create_all(bind=engine)
 
 app.include_router(todo_routes.router)
+app.include_router(auth_routes.router)
 
 @app.get("/", tags=["Root"], status_code=status.HTTP_200_OK)
 async def health_check() -> dict:

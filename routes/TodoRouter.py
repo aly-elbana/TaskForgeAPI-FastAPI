@@ -1,8 +1,7 @@
 from typing import Annotated, List
 from fastapi import APIRouter, HTTPException, status, Depends, Path
-from sqlalchemy.orm import Session
 
-from utils.database import get_db
+from utils.database import get_db, DB_DEPENDENCY
 from schemas.TodoSchema import TodoCreate, TodoResponse
 from controllers import TodoController as todo_controller
 
@@ -10,8 +9,6 @@ router = APIRouter(
     prefix="/todos",
     tags=["Todos"]
 )
-
-DB_DEPENDENCY = Annotated[Session, Depends(get_db)]
 
 @router.get("", status_code=status.HTTP_200_OK, response_model=List[TodoResponse])
 async def get_all_todos(db: DB_DEPENDENCY):

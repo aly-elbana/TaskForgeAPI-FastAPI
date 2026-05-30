@@ -1,11 +1,12 @@
-from typing import Generator
+from typing import Generator, Annotated
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy.orm import sessionmaker, declarative_base, Session
+from fastapi import Depends
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///./todos.db"
+from utils.config import settings 
 
 engine = create_engine(
-    SQLALCHEMY_DATABASE_URL,
+    settings.DATABASE_URL,
     connect_args={"check_same_thread": False}
 )
 
@@ -19,3 +20,5 @@ def get_db() -> Generator:
         yield db
     finally:
         db.close()
+        
+DB_DEPENDENCY = Annotated[Session, Depends(get_db)]

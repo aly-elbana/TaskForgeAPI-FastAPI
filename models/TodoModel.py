@@ -1,5 +1,6 @@
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
+from sqlalchemy.orm import relationship
 from utils.database import Base
-from sqlalchemy import Column, Integer, String, Boolean
 
 class Todo(Base):
     __tablename__ = "todos"
@@ -9,3 +10,7 @@ class Todo(Base):
     description = Column(String)
     priority = Column(Integer)
     complete = Column(Boolean, default=False)
+    
+    owner_id = Column(Integer, ForeignKey("users.id"))
+
+    owner = relationship("User", back_populates="todos")
