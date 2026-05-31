@@ -1,19 +1,26 @@
+from typing import Annotated
 from fastapi import APIRouter, HTTPException, status, Depends
+from fastapi.security import OAuth2PasswordRequestForm
+
 from utils.database import DB_DEPENDENCY
+from utils.config import settings
 from schemas.UserSchema import UserCreate, UserResponse
 from schemas.TokenSchema import Token
 from controllers import AuthController as auth_controller
-from fastapi.security import OAuth2PasswordRequestForm
-from typing import Annotated
-from utils.config import settings
+
+from controllers.AuthController import get_current_user
+from models.UserModel import User
 
 router = APIRouter(
     prefix=settings.AUTH_PREFIX,
     tags=["Authentication"]
 )
 
+USER_DEPENDENCY = Annotated[User, Depends(get_current_user)]
+
+
 @router.get("", status_code=status.HTTP_200_OK, response_model=list[UserResponse])
-async def get_all_users(db: DB_DEPENDENCY):
+async def get_all_users(db: DB_DEPENDENCY, current_user: USER_DEPENDENCY):
     return auth_controller.get_all_users(db)
 
 @router.post("/register", status_code=status.HTTP_201_CREATED, response_model=UserResponse)
