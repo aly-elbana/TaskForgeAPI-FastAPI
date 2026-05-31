@@ -1,12 +1,14 @@
 from fastapi import APIRouter, HTTPException, status, Depends
 from utils.database import DB_DEPENDENCY
 from schemas.UserSchema import UserCreate, UserResponse
+from schemas.TokenSchema import Token
 from controllers import AuthController as auth_controller
 from fastapi.security import OAuth2PasswordRequestForm
 from typing import Annotated
+from utils.config import settings
 
 router = APIRouter(
-    prefix="/auth",
+    prefix=settings.AUTH_PREFIX,
     tags=["Authentication"]
 )
 
@@ -25,7 +27,7 @@ async def register_user(user_data: UserCreate, db: DB_DEPENDENCY):
             detail="Email or username already registered."
         )
         
-@router.post("/login", status_code=status.HTTP_200_OK, response_model=UserResponse)
+@router.post("/login", status_code=status.HTTP_200_OK, response_model=Token)
 async def login_user(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: DB_DEPENDENCY):
     user = auth_controller.login_user(db, form_data.username, form_data.password)
     if not user:
@@ -33,4 +35,6 @@ async def login_user(form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
             status_code=status.HTTP_401_UNAUTHORIZED, 
             detail="Invalid email or password."
         )
-    return user
+        
+    token = auth_controller.create_access_token(user.username, user.id)
+    return Token(access_token=token, token_type="bearer")

@@ -1,14 +1,14 @@
-# main.py
 from fastapi import FastAPI, status
 from utils.database import engine, Base
 from routes import TodoRouter as todo_routes
 from routes import AuthRouter as auth_routes
+from utils.config import settings
 
 
 app = FastAPI(
-    title="Todo API",
-    description="A Todo API using FastAPI and SQLAlchemy organized cleanly",
-    version="1.0.0"
+    title=settings.PROJECT_TITLE,
+    description=settings.PROJECT_DESCRIPTION,
+    version=settings.PROJECT_VERSION
 )
 
 Base.metadata.create_all(bind=engine)

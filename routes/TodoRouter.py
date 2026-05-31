@@ -4,9 +4,10 @@ from fastapi import APIRouter, HTTPException, status, Depends, Path
 from utils.database import get_db, DB_DEPENDENCY
 from schemas.TodoSchema import TodoCreate, TodoResponse
 from controllers import TodoController as todo_controller
+from utils.config import settings
 
 router = APIRouter(
-    prefix="/todos",
+    prefix=settings.TODO_PREFIX,
     tags=["Todos"]
 )
 
